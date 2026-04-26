@@ -111,3 +111,42 @@ with col4:
         <div class="metric-sub">{min_country['Freshwater']:,.0f} m³</div>
     </div>
     """, unsafe_allow_html=True)
+    tab1, tab2, tab3, tab4 = st.tabs([
+    "Country Rankings",
+    "Trend Analysis",
+    "Global Map",
+    "Strategic Insights"
+])
+
+with tab1:
+    st.subheader(f"Top {top_n} Countries — {selected_year}")
+
+    top_data = year_data.nlargest(top_n, "Freshwater")
+
+    fig_top = px.bar(
+        top_data,
+        x="Freshwater",
+        y="Country",
+        orientation="h",
+        color="Freshwater",
+        color_continuous_scale=chart_theme,
+        template="plotly_white"
+    )
+
+    st.plotly_chart(fig_top, use_container_width=True)
+
+    st.subheader(f"Bottom {top_n} Water Scarce Countries — {selected_year}")
+
+    bottom_data = year_data.nsmallest(top_n, "Freshwater")
+
+    fig_bottom = px.bar(
+        bottom_data,
+        x="Freshwater",
+        y="Country",
+        orientation="h",
+        color="Freshwater",
+        color_continuous_scale="Reds",
+        template="plotly_white"
+    )
+
+    st.plotly_chart(fig_bottom, use_container_width=True)
