@@ -36,3 +36,33 @@ def load_data():
 
 df, year_cols = load_data()
 available_years = [y for y in year_cols if not df[y].isna().all()]
+with st.sidebar:
+    st.header("Dashboard Controls")
+
+    selected_year = st.select_slider(
+        "Select Analysis Year",
+        options=available_years,
+        value="2020" if "2020" in available_years else available_years[-1]
+    )
+
+    selected_countries = st.multiselect(
+        "Compare Countries",
+        options=sorted(df["Country Name"].dropna().unique().tolist()),
+        default=["Sri Lanka", "India", "Australia"]
+    )
+
+    top_n = st.slider(
+        "Top Countries Ranking",
+        min_value=5,
+        max_value=20,
+        value=10
+    )
+
+    st.markdown("---")
+    st.markdown("### Dataset Information")
+    st.markdown("""
+**Source:** World Bank Open Data  
+**Indicator:** ER.H2O.INTR.PC  
+
+Renewable Internal Freshwater Resources per Capita
+""")
