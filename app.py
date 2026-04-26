@@ -222,3 +222,14 @@ with tab1:
     st.success(
         "Conclusion: Sustainable water resource management is essential for long-term environmental balance and human wellbeing."
     )
+    with st.expander("View Raw Dataset"):
+    st.dataframe(df, use_container_width=True)
+
+fig_pie = px.pie(
+    values=[below_avg, len(year_data) - below_avg],
+    names=["Below Global Average", "Above Global Average"],
+    hole=0.4,
+    template="plotly_white"
+)
+
+st.plotly_chart(fig_pie, use_container_width=True)
