@@ -150,3 +150,34 @@ with tab1:
     )
 
     st.plotly_chart(fig_bottom, use_container_width=True)
+    with tab2:
+    st.subheader("Freshwater Resource Trends Over Time")
+
+    if selected_countries:
+        trend_df = df[df["Country Name"].isin(selected_countries)][
+            ["Country Name"] + available_years
+        ].copy()
+
+        trend_long = trend_df.melt(
+            id_vars="Country Name",
+            value_vars=available_years,
+            var_name="Year",
+            value_name="Freshwater"
+        )
+
+        trend_long["Year"] = trend_long["Year"].astype(int)
+        trend_long = trend_long.dropna()
+
+        fig_line = px.line(
+            trend_long,
+            x="Year",
+            y="Freshwater",
+            color="Country Name",
+            markers=True,
+            template="plotly_white"
+        )
+
+        st.plotly_chart(fig_line, use_container_width=True)
+
+    else:
+        st.info("Please select at least one country from the sidebar.")
