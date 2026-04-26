@@ -202,3 +202,23 @@ with tab1:
     Hover over any country to see the exact value.
     </div>
     """, unsafe_allow_html=True)
+    with tab4:
+    st.subheader("Strategic Insights and Sustainability Findings")
+
+    insights = [
+        f"In {selected_year}, the global average freshwater availability was {global_avg:,.0f} m³ per person.",
+        f"{max_country['Country']} recorded the highest freshwater availability at {max_country['Freshwater']:,.0f} m³ per capita.",
+        f"{min_country['Country']} showed the lowest freshwater availability at {min_country['Freshwater']:,.0f} m³ per capita.",
+        f"{below_avg} countries fall below the global average freshwater availability.",
+        "Climate change and population growth are major reasons for freshwater scarcity."
+    ]
+
+    for item in insights:
+        st.markdown(
+            f"<div class='insight-box'>• {item}</div>",
+            unsafe_allow_html=True
+        )
+
+    st.success(
+        "Conclusion: Sustainable water resource management is essential for long-term environmental balance and human wellbeing."
+    )
