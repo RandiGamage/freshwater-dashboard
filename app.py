@@ -74,3 +74,40 @@ global_avg = year_data["Freshwater"].mean()
 max_country = year_data.loc[year_data["Freshwater"].idxmax()]
 min_country = year_data.loc[year_data["Freshwater"].idxmin()]
 below_avg = (year_data["Freshwater"] < global_avg).sum()
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    st.markdown(f"""
+    <div class="metric-card blue">
+        <div class="metric-label">Countries with Data</div>
+        <div class="metric-value">{len(year_data)}</div>
+        <div class="metric-sub">for year {selected_year}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown(f"""
+    <div class="metric-card teal">
+        <div class="metric-label">Global Average</div>
+        <div class="metric-value">{global_avg:,.0f} m³</div>
+        <div class="metric-sub">per capita</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col3:
+    st.markdown(f"""
+    <div class="metric-card green">
+        <div class="metric-label">Highest Availability</div>
+        <div class="metric-value">{max_country['Country']}</div>
+        <div class="metric-sub">{max_country['Freshwater']:,.0f} m³</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col4:
+    st.markdown(f"""
+    <div class="metric-card blue">
+        <div class="metric-label">Most Water Scarce</div>
+        <div class="metric-value">{min_country['Country']}</div>
+        <div class="metric-sub">{min_country['Freshwater']:,.0f} m³</div>
+    </div>
+    """, unsafe_allow_html=True)
