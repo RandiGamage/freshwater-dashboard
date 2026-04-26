@@ -66,3 +66,11 @@ with st.sidebar:
 
 Renewable Internal Freshwater Resources per Capita
 """)
+    year_data = df[["Country Name", selected_year]].dropna()
+year_data.columns = ["Country", "Freshwater"]
+year_data = year_data[year_data["Freshwater"] > 0]
+
+global_avg = year_data["Freshwater"].mean()
+max_country = year_data.loc[year_data["Freshwater"].idxmax()]
+min_country = year_data.loc[year_data["Freshwater"].idxmin()]
+below_avg = (year_data["Freshwater"] < global_avg).sum()
