@@ -181,3 +181,24 @@ with tab1:
 
     else:
         st.info("Please select at least one country from the sidebar.")
+        with tab3:
+    st.subheader(f"Global Freshwater Distribution Map ({selected_year})")
+
+    fig_map = px.choropleth(
+        year_data,
+        locations="Country",
+        locationmode="country names",
+        color="Freshwater",
+        hover_name="Country",
+        color_continuous_scale="Blues",
+        template="plotly_white"
+    )
+
+    st.plotly_chart(fig_map, use_container_width=True)
+
+    st.markdown("""
+    <div class='map-tip'>
+    <strong>How to read this map:</strong> Darker blue indicates higher freshwater availability per person.
+    Hover over any country to see the exact value.
+    </div>
+    """, unsafe_allow_html=True)
