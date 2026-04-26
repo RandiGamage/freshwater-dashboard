@@ -150,7 +150,8 @@ with tab1:
     )
 
     st.plotly_chart(fig_bottom, use_container_width=True)
-    with tab2:
+
+with tab2:
     st.subheader("Freshwater Resource Trends Over Time")
 
     if selected_countries:
@@ -181,6 +182,7 @@ with tab1:
 
     else:
         st.info("Please select at least one country from the sidebar.")
+   
         with tab3:
     st.subheader(f"Global Freshwater Distribution Map ({selected_year})")
 
