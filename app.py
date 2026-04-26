@@ -14,6 +14,7 @@ st.markdown("""
 This dashboard provides an interactive analysis of renewable internal freshwater
 resources per capita across countries using World Bank Open Data.
 """)
+
 @st.cache_data
 def load_data():
     df = pd.read_csv("freshwater.csv", skiprows=4)
@@ -36,6 +37,7 @@ def load_data():
 
 df, year_cols = load_data()
 available_years = [y for y in year_cols if not df[y].isna().all()]
+
 with st.sidebar:
     st.header("Dashboard Controls")
 
@@ -66,7 +68,8 @@ with st.sidebar:
 
 Renewable Internal Freshwater Resources per Capita
 """)
-    year_data = df[["Country Name", selected_year]].dropna()
+
+year_data = df[["Country Name", selected_year]].dropna()
 year_data.columns = ["Country", "Freshwater"]
 year_data = year_data[year_data["Freshwater"] > 0]
 
@@ -74,49 +77,29 @@ global_avg = year_data["Freshwater"].mean()
 max_country = year_data.loc[year_data["Freshwater"].idxmax()]
 min_country = year_data.loc[year_data["Freshwater"].idxmin()]
 below_avg = (year_data["Freshwater"] < global_avg).sum()
+
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    st.markdown(f"""
-    <div class="metric-card blue">
-        <div class="metric-label">Countries with Data</div>
-        <div class="metric-value">{len(year_data)}</div>
-        <div class="metric-sub">for year {selected_year}</div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.metric("Countries with Data", len(year_data))
 
 with col2:
-    st.markdown(f"""
-    <div class="metric-card teal">
-        <div class="metric-label">Global Average</div>
-        <div class="metric-value">{global_avg:,.0f} m³</div>
-        <div class="metric-sub">per capita</div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.metric("Global Average", f"{global_avg:,.0f} m³")
 
 with col3:
-    st.markdown(f"""
-    <div class="metric-card green">
-        <div class="metric-label">Highest Availability</div>
-        <div class="metric-value">{max_country['Country']}</div>
-        <div class="metric-sub">{max_country['Freshwater']:,.0f} m³</div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.metric("Highest Availability", max_country["Country"])
 
 with col4:
-    st.markdown(f"""
-    <div class="metric-card blue">
-        <div class="metric-label">Most Water Scarce</div>
-        <div class="metric-value">{min_country['Country']}</div>
-        <div class="metric-sub">{min_country['Freshwater']:,.0f} m³</div>
-    </div>
-    """, unsafe_allow_html=True)
-    tab1, tab2, tab3, tab4 = st.tabs([
+    st.metric("Most Water Scarce", min_country["Country"])
+
+
+tab1, tab2, tab3, tab4 = st.tabs([
     "Country Rankings",
     "Trend Analysis",
     "Global Map",
     "Strategic Insights"
 ])
+
 
 with tab1:
     st.subheader(f"Top {top_n} Countries — {selected_year}")
@@ -129,7 +112,7 @@ with tab1:
         y="Country",
         orientation="h",
         color="Freshwater",
-        color_continuous_scale=chart_theme,
+        color_continuous_scale="Blues",
         template="plotly_white"
     )
 
@@ -150,6 +133,7 @@ with tab1:
     )
 
     st.plotly_chart(fig_bottom, use_container_width=True)
+
 
 with tab2:
     st.subheader("Freshwater Resource Trends Over Time")
@@ -182,8 +166,9 @@ with tab2:
 
     else:
         st.info("Please select at least one country from the sidebar.")
-   
-        with tab3:
+
+
+with tab3:
     st.subheader(f"Global Freshwater Distribution Map ({selected_year})")
 
     fig_map = px.choropleth(
@@ -204,7 +189,9 @@ with tab2:
     Hover over any country to see the exact value.
     </div>
     """, unsafe_allow_html=True)
-    with tab4:
+
+
+with tab4:
     st.subheader("Strategic Insights and Sustainability Findings")
 
     insights = [
@@ -216,16 +203,16 @@ with tab2:
     ]
 
     for item in insights:
-        st.markdown(
-            f"<div class='insight-box'>• {item}</div>",
-            unsafe_allow_html=True
-        )
+        st.markdown(f"• {item}")
 
     st.success(
         "Conclusion: Sustainable water resource management is essential for long-term environmental balance and human wellbeing."
     )
-    with st.expander("View Raw Dataset"):
+
+
+with st.expander("View Raw Dataset"):
     st.dataframe(df, use_container_width=True)
+
 
 fig_pie = px.pie(
     values=[below_avg, len(year_data) - below_avg],
